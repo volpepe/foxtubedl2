@@ -5,12 +5,13 @@ from tkinter import (DISABLED, Button, Entry, Label, StringVar, Tk, W,
 import pyperclip
 import yaml
 
+from .paths import resource_path
 from .logic import DownloadThread
 
 
 def gui_setup():
 
-    with open('config.yaml', 'r') as f:
+    with open(resource_path('config.yaml'), 'r') as f:
         config = yaml.safe_load(f)
 
     root = Tk()

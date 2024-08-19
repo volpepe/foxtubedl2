@@ -7,6 +7,8 @@ from tkinter import DISABLED, NORMAL
 
 import yaml
 
+from .paths import resource_path
+
 
 class OutShowThread(threading.Thread):
     def __init__(self, text, out): 
@@ -47,7 +49,7 @@ class DownloadThread(threading.Thread):
         self.running = False
         self.x = OutShowThread(self.text_label, self.out_label)
         self.type = dl_type
-        with open('config.yaml','r') as f:
+        with open(resource_path('config.yaml'),'r') as f:
             self.config = yaml.safe_load(f)
         self.x.start()
 
@@ -85,7 +87,8 @@ class DownloadThread(threading.Thread):
     
     def get_title(self):
         # get title of the final video/audio file
-        command_title = '{} --get-filename {}'.format(os.path.join('.', 'bin', 'yt-dlp.exe'), self.entry_url_label.get())
+        command_title = '{} --get-filename {}'.format(resource_path(os.path.join('bin', 'yt-dlp.exe')), 
+                                                      self.entry_url_label.get())
         # will ignore any non-utf-8 chars in title
         title = subprocess.check_output(command_title, shell=True).decode("utf-8", 'ignore').rstrip()[:-4]
         return title
@@ -94,7 +97,7 @@ class DownloadThread(threading.Thread):
     def build_download_command(self, start, end, title):
         if self.type == 'audio':
             command = '{} -x {} --audio-format {} --audio-quality {} -o "{}%(ext)s" {}'.format(
-                os.path.join('.','bin','yt-dlp.exe'),
+                resource_path(os.path.join('bin','yt-dlp.exe')),
                 self.add_time_commands(start, end, 'ffmpeg_pre'), 
                 self.config['formats']['audio'], 
                 self.config['quality']['audio'],
@@ -102,7 +105,7 @@ class DownloadThread(threading.Thread):
                 self.entry_url_label.get())
         elif self.type == 'video':
             command = '{} {} -f {} --merge-output-format {} --remux-video {} -o "{}%(ext)s" {}'.format(
-                os.path.join('.','bin','yt-dlp.exe'),
+                resource_path(os.path.join('bin','yt-dlp.exe')),
                 self.add_time_commands(start, end, 'ffmpeg_pre'), 
                 self.config['quality']['video'],
                 self.config['formats']['video'],

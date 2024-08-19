@@ -2,16 +2,20 @@ import subprocess
 import os
 import sys
 
-from src import gui_setup
+import yaml
+
+from src import gui_setup, resource_path
 
 
 if __name__ == '__main__':
 
-    sys.path.append(os.path.abspath('bin/ffmpeg/bin'))
+    sys.path.append(os.path.abspath(resource_path(os.path.join('bin', 'ffmpeg', 'bin'))))
 
-    print("VIDEO-MUSIC-DOWNLOAD")
+    with open(resource_path('config.yaml'), 'r') as f:
+        config = yaml.safe_load(f)
+    print(config['app']['title'] + " - by " + config['app']['by'])
     print("-----------------------------------\n\nControllo aggiornamenti...\n\n")
-    subprocess.call([os.path.join('.', 'bin', 'yt-dlp.exe'), "-U"])
+    subprocess.call([resource_path(os.path.join('bin', 'yt-dlp.exe')), "-U"])
     print("-----------------------------------\n\nOK.\n\n")
 
     root_app = gui_setup()

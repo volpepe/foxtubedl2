@@ -5,3 +5,4 @@ pycryptodomex
 pyperclip
 websockets
 PyYAML
+pyinstaller
