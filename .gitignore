@@ -3,8 +3,8 @@ test
 *__pycache__*
 bin/ffmpeg
 bin/yt-dlp
+bin/upx
 build
 dist
 *.spec
 *.exe
-

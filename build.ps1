@@ -7,4 +7,5 @@ pyinstaller.exe --clean         `
     --add-binary=".\bin\ffmpeg\bin\ffplay.exe:bin\ffmpeg\bin"   `
     --add-binary=".\bin\ffmpeg\bin\ffprobe.exe:bin\ffmpeg\bin"  `
     --add-binary=".\bin\yt-dlp.exe:bin"                         `
+    --upx-dir=".\bin\upx"                                       `
     .\start.py
