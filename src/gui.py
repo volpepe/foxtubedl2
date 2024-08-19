@@ -68,16 +68,16 @@ def gui_setup():
     text.grid(row=3, column=0, columnspan=8, pady=15, padx=20)
     text.config(state=DISABLED)
 
-    def start_download():
+    def start_download_audio():
         y = DownloadThread('audio', entry_url, text, folder_text, 
                            st_min, st_sec, en_min, en_sec, 
-                           out)
+                           out, dl_button_audio, dl_button_video)
         y.start()
 
     def start_download_video():
         y = DownloadThread('video', entry_url, text, folder_text, 
                             st_min, st_sec, en_min, en_sec, 
-                            out)
+                            out, dl_button_audio, dl_button_video)
         y.start()
 
     def paste():
@@ -88,18 +88,18 @@ def gui_setup():
         folder_text.set(filedialog.askdirectory(initialdir=folder_text.get(), 
             title="Seleziona Cartella di Destinazione").replace('/', os.sep))
 
-    dl_button = Button(root, text='Download Audio', command=start_download, bg='brown',fg='white')
-    dl_button.grid(row=0, column=5)  
+    dl_button_audio = Button(root, text='Download Audio', command=start_download_audio, bg='brown', fg='white')
+    dl_button_audio.grid(row=0, column=5)  
 
-    dl_button = Button(root, text='Download Video', command=start_download_video, bg='brown', fg='white')
-    dl_button.grid(row=0, column=6, padx=20)
+    dl_button_video = Button(root, text='Download Video', command=start_download_video, bg='brown', fg='white')
+    dl_button_video.grid(row=0, column=6, padx=20)
 
     #create the paste button
     pt_button = Button(root, text='Incolla', command=paste, bg='brown', fg='white')
     pt_button.grid(row=0, column=7, padx=10)
 
     #create the choose folder button
-    fold_button = Button(root, text="Seleziona...", command=select_folder, bg="brown", fg="white")
-    fold_button.grid(row=2, column=5, pady=15, padx=2, sticky=W)
+    choose_fold_button = Button(root, text="Seleziona...", command=select_folder, bg="brown", fg="white")
+    choose_fold_button.grid(row=2, column=5, pady=15, padx=2, sticky=W)
 
     return root

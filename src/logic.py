@@ -35,7 +35,7 @@ class DownloadThread(threading.Thread):
     def __init__(self, dl_type, entry_url, text_label, 
                  folder_text_label,
                  st_min, st_sec, en_min, en_sec, 
-                 out_label): 
+                 out_label, dl_button_audio, dl_button_video): 
         threading.Thread.__init__(self)
         self.dl_type = dl_type
         self.entry_url_label = entry_url
@@ -47,14 +47,19 @@ class DownloadThread(threading.Thread):
         self.en_sec = en_sec
         self.out_label = out_label
         self.running = False
-        self.x = OutShowThread(self.text_label, self.out_label)
+        self.out_show_thread = OutShowThread(self.text_label, self.out_label)
         self.type = dl_type
+        self.dl_button_audio = dl_button_audio
+        self.dl_button_video = dl_button_video
         with open(resource_path('config.yaml'),'r') as f:
             self.config = yaml.safe_load(f)
-        self.x.start()
+        self.out_show_thread.start()
 
     def run(self):
         self.running = True
+
+        self.dl_button_audio['state'] = 'disabled'
+        self.dl_button_video['state'] = 'disabled'
 
         start, end = self.check_timings()
         start_string = str(start).replace(':', '_')
@@ -84,7 +89,6 @@ class DownloadThread(threading.Thread):
 
         self.stop_execution(status_string)
 
-    
     def get_title(self):
         # get title of the final video/audio file
         command_title = '{} --get-filename {}'.format(resource_path(os.path.join('bin', 'yt-dlp.exe')), 
@@ -92,7 +96,6 @@ class DownloadThread(threading.Thread):
         # will ignore any non-utf-8 chars in title
         title = subprocess.check_output(command_title, shell=True).decode("utf-8", 'ignore').rstrip()[:-4]
         return title
-
 
     def build_download_command(self, start, end, title):
         if self.type == 'audio':
@@ -114,7 +117,6 @@ class DownloadThread(threading.Thread):
                 self.entry_url_label.get()
             )
         return command
-
 
     def check_timings(self):
         start = end = datetime.timedelta(seconds=0)
@@ -144,11 +146,14 @@ class DownloadThread(threading.Thread):
         return com
 
     def stop_execution(self, status_string):
-        self.x.stop()
-        self.x.join()
+        self.out_show_thread.stop()
+        self.out_show_thread.join()
         self.running = False
 
-        #clean slate
+        self.dl_button_audio['state'] = NORMAL
+        self.dl_button_video['state'] = NORMAL
+
+        # clean slate
         self.text_label.config(state=NORMAL)
         self.out_label.set(status_string)
         self.text_label.config(state=DISABLED)
