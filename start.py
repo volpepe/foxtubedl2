@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     print("VIDEO-MUSIC-DOWNLOAD")
     print("-----------------------------------\n\nControllo aggiornamenti...\n\n")
-    subprocess.call([os.path.join('.', 'bin', 'yt-dlp'), "-U"])
+    subprocess.call([os.path.join('.', 'bin', 'yt-dlp.exe'), "-U"])
     print("-----------------------------------\n\nOK.\n\n")
 
     root_app = gui_setup()

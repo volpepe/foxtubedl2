@@ -3,4 +3,8 @@ test
 *__pycache__*
 bin/ffmpeg
 bin/yt-dlp
+build
+dist
+*.spec
+*.exe
 

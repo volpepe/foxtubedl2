@@ -5,6 +5,11 @@ import shutil
 
 if __name__ == '__main__':
 
+    if os.path.exists('ffmpeg'):
+        shutil.rmtree(os.path.join("ffmpeg"))
+    if os.path.exists('yt-dlp.exe'):
+        os.remove('yt-dlp.exe')
+
     print("Downloading ffmpeg...")
     urllib.request.urlretrieve('https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip', 'ffmpeg.zip')
     with zipfile.ZipFile('ffmpeg.zip', 'r') as zip_ref:
@@ -14,4 +19,4 @@ if __name__ == '__main__':
     shutil.rmtree(os.path.join("ffmpeg", "doc"))
     
     print("Downloading yt-dlp...")
-    urllib.request.urlretrieve('https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp', 'yt-dlp')
+    urllib.request.urlretrieve('https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe', 'yt-dlp.exe')
