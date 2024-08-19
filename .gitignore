@@ -1,0 +1,6 @@
+.env
+test
+*__pycache__*
+bin/ffmpeg
+bin/yt-dlp
+

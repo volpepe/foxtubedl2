@@ -1,0 +1,7 @@
+Brotli
+certifi
+mutagen
+pycryptodomex
+pyperclip
+websockets
+PyYAML

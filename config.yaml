@@ -1,0 +1,12 @@
+formats: 
+  audio: 'mp3'
+  video: 'mp4'
+quality:
+ audio: 0
+ video: bestvideo+bestaudio/best
+app:
+  title: YouTube Downloader
+  by: volpepe
+  start_geometry:
+    width: 950
+    height: 200
