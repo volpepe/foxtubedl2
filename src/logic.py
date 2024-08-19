@@ -93,7 +93,7 @@ class DownloadThread(threading.Thread):
 
     def build_download_command(self, start, end, title):
         if self.type == 'audio':
-            command = '{} -x {} --audio-format {} --audio-quality {} -o "{}.%(ext)s" {}'.format(
+            command = '{} -x {} --audio-format {} --audio-quality {} -o "{}%(ext)s" {}'.format(
                 os.path.join('.','bin','yt-dlp'),
                 self.add_time_commands(start, end, 'ffmpeg_pre'), 
                 self.config['formats']['audio'], 
@@ -101,8 +101,7 @@ class DownloadThread(threading.Thread):
                 os.path.join(self.folder_text_label.get(), title), 
                 self.entry_url_label.get())
         elif self.type == 'video':
-            #1
-            command = '{} {} -f {} --merge-output-format {} --remux-video {} -o "{}.%(ext)s" {}'.format(
+            command = '{} {} -f {} --merge-output-format {} --remux-video {} -o "{}%(ext)s" {}'.format(
                 os.path.join('.','bin','yt-dlp'),
                 self.add_time_commands(start, end, 'ffmpeg_pre'), 
                 self.config['quality']['video'],
