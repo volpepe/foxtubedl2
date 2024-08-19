@@ -1,4 +1,5 @@
 import os
+import subprocess
 from tkinter import (DISABLED, Button, Entry, Label, StringVar, Tk, W,
                      filedialog)
 
@@ -87,6 +88,9 @@ def gui_setup():
     def select_folder():
         folder_text.set(filedialog.askdirectory(initialdir=folder_text.get(), 
             title="Seleziona Cartella di Destinazione").replace('/', os.sep))
+        
+    def open_folder():
+        subprocess.call('explorer "{}"'.format(folder_text.get()))
 
     dl_button_audio = Button(root, text='Download Audio', command=start_download_audio, bg='brown', fg='white')
     dl_button_audio.grid(row=0, column=5)  
@@ -101,5 +105,9 @@ def gui_setup():
     #create the choose folder button
     choose_fold_button = Button(root, text="Seleziona...", command=select_folder, bg="brown", fg="white")
     choose_fold_button.grid(row=2, column=5, pady=15, padx=2, sticky=W)
+
+    #create the visualize folder button
+    open_fold_button = Button(root, text="Apri", command=open_folder, bg='brown', fg='white')
+    open_fold_button.grid(row=2, column=6, padx=20, pady=2, sticky=W)
 
     return root

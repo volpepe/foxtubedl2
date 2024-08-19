@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     with open(resource_path('config.yaml'), 'r') as f:
         config = yaml.safe_load(f)
-    print(config['app']['title'] + " - by " + config['app']['by'])
+    print("\n\n" + config['app']['title'] + " - by " + config['app']['by'])
     print("-----------------------------------\n\nControllo aggiornamenti...\n\n")
     subprocess.call([resource_path(os.path.join('bin', 'yt-dlp.exe')), "-U"])
     print("-----------------------------------\n\nOK.\n\n")
