@@ -1,6 +1,6 @@
 import os
 import subprocess
-from tkinter import (DISABLED, Button, Entry, Frame, Label, StringVar, Tk, W,
+from tkinter import (DISABLED, Button, Entry, Frame, Label, StringVar, Tk,
                      filedialog, font)
 
 import pyperclip
@@ -8,6 +8,7 @@ import yaml
 
 from .paths import resource_path
 from .logic import DownloadThread
+from .strings import STRINGS
 
 
 def gui_setup():
@@ -48,7 +49,7 @@ def gui_setup():
 
     def select_folder():
         folder_text.set(filedialog.askdirectory(initialdir=folder_text.get(), 
-            title="Seleziona Cartella di Destinazione").replace('/', os.sep))
+            title=STRINGS['ASK_DIR_STR'][config['app']['lang']]).replace('/', os.sep))
         
     def open_folder():
         subprocess.call('explorer "{}"'.format(folder_text.get()))
@@ -73,14 +74,18 @@ def gui_setup():
     link_frame = Frame(root)
     link_frame.pack(pady=10, padx=5, expand=True, fill='x')
 
-    label = Label(link_frame, text='Incolla qui il link:', font=default_font)
+    label = Label(link_frame, 
+                  text=STRINGS['PASTE_LABEL_STR'][config['app']['lang']], 
+                  font=default_font)
     label.pack(side='left', ipadx=5, ipady=5)
 
     #create the paste button
-    pt_button = Button(link_frame, text='Incolla', command=paste, 
-        bg=config['app']['colors']['bg'], 
-        fg=config['app']['colors']['fg'],
-        font=default_font)
+    pt_button = Button(link_frame, 
+                       text=STRINGS['PASTE_BUTTON_STR'][config['app']['lang']], 
+                       command=paste, 
+                       bg=config['app']['colors']['bg'], 
+                       fg=config['app']['colors']['fg'],
+                       font=default_font)
     pt_button.pack(side='right', padx=15, ipadx=5, ipady=5)
 
     #creating the input space (entry)
@@ -91,7 +96,7 @@ def gui_setup():
     #creating the time selectors
     time_select_frame = Frame(root)
     time_select_frame.pack(padx=50, pady=1, expand=True, fill='x')
-    label = Label(time_select_frame, text='Da (min - sec):', font=default_font)
+    label = Label(time_select_frame, text=STRINGS['FROM_LABEL_STR'][config['app']['lang']], font=default_font)
     label.pack(side='left')
     entry = Entry(time_select_frame, textvariable=st_min, width=5, relief='sunken')
     entry.pack(side='left', padx=10, ipadx=5, ipady=5)
@@ -101,7 +106,7 @@ def gui_setup():
     entry.pack(side='left', padx=10, ipadx=5, ipady=5)
     label = Label(time_select_frame, text='')
     label.pack(side='left', padx=10, expand=True, fill='x')
-    label = Label(time_select_frame, text='A (min - sec):', font=default_font)
+    label = Label(time_select_frame, text=STRINGS['TO_LABEL_STR'][config['app']['lang']], font=default_font)
     label.pack(side='left')
     entry = Entry(time_select_frame, textvariable=en_min, width=5, relief='sunken')
     entry.pack(side='left', padx=10, ipadx=5, ipady=5)
@@ -114,14 +119,18 @@ def gui_setup():
     folder_frame = Frame(root)
     folder_frame.pack(pady=5, padx=5, expand=True, fill='x')
 
-    label = Label(folder_frame, text="Destinazione:", font=default_font)
+    label = Label(folder_frame, 
+                  text=STRINGS['DESTINATION_LABEL_STR'][config['app']['lang']], 
+                  font=default_font)
     label.pack(side='left', ipadx=5, ipady=5)
 
     #create the choose folder button
-    choose_fold_button = Button(folder_frame, text="Seleziona", command=select_folder, 
-        bg=config['app']['colors']['bg'], 
-        fg=config['app']['colors']['fg'],
-        font=default_font)
+    choose_fold_button = Button(folder_frame, 
+                                text=STRINGS['SELECT_LABEL_STR'][config['app']['lang']], 
+                                command=select_folder, 
+                                bg=config['app']['colors']['bg'], 
+                                fg=config['app']['colors']['fg'],
+                                font=default_font)
     choose_fold_button.pack(side='right', padx=5, ipadx=5, ipady=5)
 
     #initialize folder text
@@ -134,23 +143,29 @@ def gui_setup():
     download_frame = Frame(root)
     download_frame.pack(pady=10, padx=5, expand=True, fill='x')
 
-    dl_button_video = Button(download_frame, text='Download Video', command=start_download_video, 
-        bg=config['app']['colors']['bg'], 
-        fg=config['app']['colors']['fg'],
-        font=stronger_font)
+    dl_button_video = Button(   download_frame, 
+                                text=STRINGS['DOWNLOAD_VIDEO_STR'][config['app']['lang']], 
+                                command=start_download_video, 
+                                bg=config['app']['colors']['bg'], 
+                                fg=config['app']['colors']['fg'],
+                                font=stronger_font)
     dl_button_video.pack(side='right', padx=25, ipadx=8, ipady=8)
 
     #create the visualize folder button
-    open_fold_button = Button(download_frame, text="Apri Destinazione", command=open_folder, 
-        bg=config['app']['colors']['bg'], 
-        fg=config['app']['colors']['fg'],
-        font=default_font)
+    open_fold_button = Button(  download_frame, 
+                                text=STRINGS['OPEN_LABEL_STR'][config['app']['lang']], 
+                                command=open_folder, 
+                                bg=config['app']['colors']['bg'], 
+                                fg=config['app']['colors']['fg'],
+                                font=default_font)
     open_fold_button.pack(side='right', padx=5, ipadx=2, ipady=2, expand=True)
 
-    dl_button_audio = Button(download_frame, text='Download Audio', command=start_download_audio, 
-        bg=config['app']['colors']['bg'], 
-        fg=config['app']['colors']['fg'],
-        font=stronger_font)
+    dl_button_audio = Button(   download_frame, 
+                                text=STRINGS['DOWNLOAD_AUDIO_STR'][config['app']['lang']], 
+                                command=start_download_audio, 
+                                bg=config['app']['colors']['bg'], 
+                                fg=config['app']['colors']['fg'],
+                                font=stronger_font)
     dl_button_audio.pack(side='right', padx=25, ipadx=8, ipady=8)
 
     #creating the out text label

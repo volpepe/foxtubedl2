@@ -8,11 +8,13 @@ from tkinter import DISABLED, NORMAL
 import yaml
 
 from .paths import resource_path
+from .strings import STRINGS
 
 
 class OutShowThread(threading.Thread):
-    def __init__(self, text, out): 
+    def __init__(self, text, out, config): 
         threading.Thread.__init__(self) 
+        self.config = config
         self.running = False
         self.text_label = text
         self.out_label = out
@@ -22,7 +24,8 @@ class OutShowThread(threading.Thread):
         count=0
         while(self.running):
             self.text_label.config(state=NORMAL)
-            self.out_label.set("Scaricando" + "."*count)
+            self.out_label.set(
+                STRINGS['OUT_DOWNLOAD_STR'][self.config['app']['lang']] + "."*count)
             count = count+1 if count < 5 else 0
             self.text_label.config(state=DISABLED)
             time.sleep(0.8)
@@ -37,6 +40,8 @@ class DownloadThread(threading.Thread):
                  st_min, st_sec, en_min, en_sec, 
                  out_label, dl_button_audio, dl_button_video): 
         threading.Thread.__init__(self)
+        with open(resource_path('config.yaml'),'r') as f:
+            self.config = yaml.safe_load(f)
         self.dl_type = dl_type
         self.entry_url_label = entry_url
         self.text_label = text_label
@@ -47,12 +52,11 @@ class DownloadThread(threading.Thread):
         self.en_sec = en_sec
         self.out_label = out_label
         self.running = False
-        self.out_show_thread = OutShowThread(self.text_label, self.out_label)
+        self.out_show_thread = OutShowThread(
+            self.text_label, self.out_label, self.config)
         self.type = dl_type
         self.dl_button_audio = dl_button_audio
         self.dl_button_video = dl_button_video
-        with open(resource_path('config.yaml'),'r') as f:
-            self.config = yaml.safe_load(f)
         self.out_show_thread.start()
 
     def run(self):
@@ -68,7 +72,7 @@ class DownloadThread(threading.Thread):
         try:
             title = self.get_title()
         except subprocess.CalledProcessError:
-            self.stop_execution('Errore: titolo non valido!!!')
+            self.stop_execution(STRINGS['ERR_TITLE_STR'][self.config['app']['lang']])
             return
         
         # add time strings to title
@@ -83,9 +87,9 @@ class DownloadThread(threading.Thread):
         status_string = ''
         try:
             subprocess.call(command, shell=True)
-            status_string = "Finito!!!"
+            status_string = STRINGS['DONE_STR'][self.config['app']['lang']]
         except subprocess.CalledProcessError:
-            status_string = "Errore durante il download!!!"
+            status_string = STRINGS['ERR_DOWNLOAD_STR'][self.config['app']['lang']]
 
         self.stop_execution(status_string)
 
