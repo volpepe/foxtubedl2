@@ -6,3 +6,4 @@ pyperclip
 websockets
 PyYAML
 pyinstaller
+Pillow

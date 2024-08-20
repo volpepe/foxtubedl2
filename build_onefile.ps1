@@ -1,5 +1,5 @@
 pyinstaller.exe --clean         `
-    -D -w                       `
+    --noconsole                 `
     -i ".\imgs\arctic-fox.ico"  `
     --name "FoxTubeDownloader-Portable"  `
     --add-data="config.yaml:."  `
@@ -9,4 +9,5 @@ pyinstaller.exe --clean         `
     --add-binary=".\bin\yt-dlp.exe:bin"                         `
     --upx-dir=".\bin\upx"                                       `
     --onefile                                                   `
+    --splash ".\imgs\splash_upscale.png"                        `
     .\start.py
