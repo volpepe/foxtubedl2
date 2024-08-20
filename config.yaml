@@ -8,5 +8,12 @@ app:
   title: YouTube Downloader
   by: volpepe
   start_geometry:
-    width: 950
-    height: 230
+    width: 700
+    height: 450
+  colors:
+    bg: brown
+    fg: white
+  fonts:
+    family: Arial
+    size: 12
+    weight: normal

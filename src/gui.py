@@ -1,7 +1,7 @@
 import os
 import subprocess
-from tkinter import (DISABLED, Button, Entry, Label, StringVar, Tk, W,
-                     filedialog)
+from tkinter import (DISABLED, Button, Entry, Frame, Label, StringVar, Tk, W,
+                     filedialog, font)
 
 import pyperclip
 import yaml
@@ -29,46 +29,7 @@ def gui_setup():
     en_sec = StringVar()
     out = StringVar()
 
-    #creating the instruction label
-    label = Label(root, text='Incolla qui il link:', font=(12), pady=15)
-    label.grid(row=0, column=0, padx=5)
-
-    #creating the input space (entry)
-    entry_url = Entry(root, textvariable=link_text, width=70)
-    entry_url.grid(row=0, column=1, columnspan=4, sticky=W, padx=20)
-
-    #creating the time selectors
-    label = Label(root, text='Minuto di inizio:', font=(12), pady=15)
-    label.grid(row=1, column=0, padx=5)
-    entry = Entry(root, textvariable=st_min, width=4)
-    entry.grid(row=1, column=1, sticky=W, padx=10)
-    label = Label(root, text='Secondo di inizio:', font=(12), pady=15)
-    label.grid(row=1, column=2, padx=5)
-    entry = Entry(root, textvariable=st_sec, width=4)
-    entry.grid(row=1, column=3, sticky=W, padx=10)
-    label = Label(root, text='Minuto di fine:', font=(12), pady=15)
-    label.grid(row=1, column=4, padx=5)
-    entry = Entry(root, textvariable=en_min, width=4)
-    entry.grid(row=1, column=5, sticky=W, padx=10)
-    label = Label(root, text='Secondo di fine:', font=(12), pady=15)
-    label.grid(row=1, column=6, padx=5)
-    entry = Entry(root, textvariable=en_sec, width=4)
-    entry.grid(row=1, column=7, sticky=W, padx=10)
-
-    #creating the output folder label and entry
-    label = Label(root, text="Destinazione:", font=(12), pady=15)
-    label.grid(row=2, column=0, padx=5)
-    entry_folder = Entry(root, textvariable=folder_text, width=70)
-    entry_folder.grid(row=2, column=1, columnspan=4, sticky=W, padx=20)
-
-    #initialize folder text
-    folder_text.set(os.getcwd())
-
-    #creating the text label
-    text = Label(root, textvariable=out, width=80, font=(18))
-    text.grid(row=3, column=0, columnspan=8, pady=15, padx=20)
-    text.config(state=DISABLED)
-
+    # Define functions
     def start_download_audio():
         y = DownloadThread('audio', entry_url, text, folder_text, 
                            st_min, st_sec, en_min, en_sec, 
@@ -92,22 +53,111 @@ def gui_setup():
     def open_folder():
         subprocess.call('explorer "{}"'.format(folder_text.get()))
 
-    dl_button_audio = Button(root, text='Download Audio', command=start_download_audio, bg='brown', fg='white')
-    dl_button_audio.grid(row=0, column=5)  
+    # Define fonts
+    default_font = font.Font(
+        family=config['app']['fonts']['family'], 
+        size=int(config['app']['fonts']['size']), 
+        weight=config['app']['fonts']['weight'])
+    stronger_font = font.Font(
+        family=config['app']['fonts']['family'],
+        size=int(config['app']['fonts']['size'])+2,
+        weight='bold'
+    )
+    large_font = font.Font(
+        family=config['app']['fonts']['family'], 
+        size=int(config['app']['fonts']['size'])+4, 
+        weight=config['app']['fonts']['weight'])
 
-    dl_button_video = Button(root, text='Download Video', command=start_download_video, bg='brown', fg='white')
-    dl_button_video.grid(row=0, column=6, padx=20)
+    # Start defining the GUI
+    #creating the instruction label
+    link_frame = Frame(root)
+    link_frame.pack(pady=10, padx=5, expand=True, fill='x')
+
+    label = Label(link_frame, text='Incolla qui il link:', font=default_font)
+    label.pack(side='left', ipadx=5, ipady=5)
 
     #create the paste button
-    pt_button = Button(root, text='Incolla', command=paste, bg='brown', fg='white')
-    pt_button.grid(row=0, column=7, padx=10)
+    pt_button = Button(link_frame, text='Incolla', command=paste, 
+        bg=config['app']['colors']['bg'], 
+        fg=config['app']['colors']['fg'],
+        font=default_font)
+    pt_button.pack(side='right', padx=15, ipadx=5, ipady=5)
+
+    #creating the input space (entry)
+    entry_url = Entry(link_frame, textvariable=link_text, width=70, font=default_font,
+                      relief='sunken')
+    entry_url.pack(side='right', padx=20, ipadx=5, ipady=5, expand=True, fill='x')
+
+    #creating the time selectors
+    time_select_frame = Frame(root)
+    time_select_frame.pack(padx=50, pady=1, expand=True, fill='x')
+    label = Label(time_select_frame, text='Da (min - sec):', font=default_font)
+    label.pack(side='left')
+    entry = Entry(time_select_frame, textvariable=st_min, width=5, relief='sunken')
+    entry.pack(side='left', padx=10, ipadx=5, ipady=5)
+    label = Label(time_select_frame, text='-', font=default_font)
+    label.pack(side='left', padx=10, ipadx=5, ipady=5)
+    entry = Entry(time_select_frame, textvariable=st_sec, width=5, relief='sunken')
+    entry.pack(side='left', padx=10, ipadx=5, ipady=5)
+    label = Label(time_select_frame, text='')
+    label.pack(side='left', padx=10, expand=True, fill='x')
+    label = Label(time_select_frame, text='A (min - sec):', font=default_font)
+    label.pack(side='left')
+    entry = Entry(time_select_frame, textvariable=en_min, width=5, relief='sunken')
+    entry.pack(side='left', padx=10, ipadx=5, ipady=5)
+    label = Label(time_select_frame, text='-', font=default_font)
+    label.pack(side='left', padx=10, ipadx=5, ipady=5)
+    entry = Entry(time_select_frame, textvariable=en_sec, width=5, relief='sunken')
+    entry.pack(side='left', padx=10, ipadx=5, ipady=5)
+
+    #creating the output folder label and entry
+    folder_frame = Frame(root)
+    folder_frame.pack(pady=5, padx=5, expand=True, fill='x')
+
+    label = Label(folder_frame, text="Destinazione:", font=default_font)
+    label.pack(side='left', ipadx=5, ipady=5)
 
     #create the choose folder button
-    choose_fold_button = Button(root, text="Seleziona...", command=select_folder, bg="brown", fg="white")
-    choose_fold_button.grid(row=2, column=5, pady=15, padx=2, sticky=W)
+    choose_fold_button = Button(folder_frame, text="Seleziona", command=select_folder, 
+        bg=config['app']['colors']['bg'], 
+        fg=config['app']['colors']['fg'],
+        font=default_font)
+    choose_fold_button.pack(side='right', padx=5, ipadx=5, ipady=5)
+
+    #initialize folder text
+    folder_text.set(os.getcwd())
+    entry_folder = Entry(folder_frame, textvariable=folder_text, width=70, font=default_font,
+                      relief='sunken')
+    entry_folder.pack(side='right', padx=20, ipadx=5, ipady=5, expand=True, fill='x')
+
+    # Create the download buttons
+    download_frame = Frame(root)
+    download_frame.pack(pady=10, padx=5, expand=True, fill='x')
+
+    dl_button_video = Button(download_frame, text='Download Video', command=start_download_video, 
+        bg=config['app']['colors']['bg'], 
+        fg=config['app']['colors']['fg'],
+        font=stronger_font)
+    dl_button_video.pack(side='right', padx=25, ipadx=8, ipady=8)
 
     #create the visualize folder button
-    open_fold_button = Button(root, text="Apri", command=open_folder, bg='brown', fg='white')
-    open_fold_button.grid(row=2, column=6, padx=20, pady=2, sticky=W)
+    open_fold_button = Button(download_frame, text="Apri Destinazione", command=open_folder, 
+        bg=config['app']['colors']['bg'], 
+        fg=config['app']['colors']['fg'],
+        font=default_font)
+    open_fold_button.pack(side='right', padx=5, ipadx=2, ipady=2, expand=True)
+
+    dl_button_audio = Button(download_frame, text='Download Audio', command=start_download_audio, 
+        bg=config['app']['colors']['bg'], 
+        fg=config['app']['colors']['fg'],
+        font=stronger_font)
+    dl_button_audio.pack(side='right', padx=25, ipadx=8, ipady=8)
+
+    #creating the out text label
+    out_frame = Frame(root)
+    out_frame.pack(pady=2, padx=5, ipady=10, expand=True, fill='both')
+    text = Label(out_frame, textvariable=out, width=80, font=large_font)
+    text.pack(expand=True, fill='both')
+    text.config(state=DISABLED)
 
     return root
