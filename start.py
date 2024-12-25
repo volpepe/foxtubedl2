@@ -3,7 +3,8 @@ import os
 import sys
 
 import yaml
-import pyi_splash
+if getattr(sys, 'frozen', False):
+    import pyi_splash
 
 from src import gui_setup, resource_path
 
@@ -19,8 +20,9 @@ if __name__ == '__main__':
     subprocess.call([resource_path(os.path.join('bin', 'yt-dlp.exe')), "-U"])
     print("-----------------------------------\n\nOK.\n\n")
 
-    # Close splash screen
-    pyi_splash.close()
+    if getattr(sys, 'frozen', False):
+        # Close splash screen
+        pyi_splash.close()
 
     root_app = gui_setup()
     root_app.mainloop()

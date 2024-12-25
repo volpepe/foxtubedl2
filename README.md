@@ -35,3 +35,9 @@ You can change some elements of the GUI through the `config.yaml` file, even aft
 Particularly, you can change the preferred video and audio formats (this is still WIP), the quality of video and audio, as well as colors, fonts and app language (IT or EN).
 ## Disclaimer
 The project is still a huge WIP and uses external libraries extensively, so I don't take any responsibility in case of weird behaviours on your computer.
+## Updates
+### Version 2.1 (25/12/2024)
+- Previously, the application actually required ffmpeg to be on path. Now, the `--ffmpeg-location` flag is added to all commands to use the bundled version.
+- Added debug configuration.
+- Removed ffprobe and ffplay from binary requirements.
+- Fixed pysplash requirement.

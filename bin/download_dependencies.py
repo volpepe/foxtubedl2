@@ -17,8 +17,11 @@ if __name__ == '__main__':
     with zipfile.ZipFile('ffmpeg.zip', 'r') as zip_ref:
         zip_ref.extractall('.')
     os.remove('ffmpeg.zip')
+    os.chmod('ffmpeg-master-latest-win64-gpl', 0o777)
     os.rename('ffmpeg-master-latest-win64-gpl', 'ffmpeg')
     shutil.rmtree(os.path.join("ffmpeg", "doc"))
+    os.remove(os.path.join('ffmpeg', 'bin', 'ffplay.exe'))
+    os.remove(os.path.join('ffmpeg', 'bin', 'ffprobe.exe'))
 
     print("Downloading yt-dlp...")
     urllib.request.urlretrieve('https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe', 'yt-dlp.exe')
@@ -28,4 +31,5 @@ if __name__ == '__main__':
     with zipfile.ZipFile('upx.zip', 'r') as zip_ref:
         zip_ref.extractall('.')
     os.remove('upx.zip')
+    os.chmod('upx-4.2.4-win64', 0o777)
     os.rename('upx-4.2.4-win64', 'upx')

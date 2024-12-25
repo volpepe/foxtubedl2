@@ -97,9 +97,15 @@ class DownloadThread(threading.Thread):
         # get title of the final video/audio file
         command_title = '{} --get-filename {}'.format(resource_path(os.path.join('bin', 'yt-dlp.exe')), 
                                                       self.entry_url_label.get())
+        command_title = self.add_ffmpeg_path_to_command(command_title)
         # will ignore any non-utf-8 chars in title
         title = subprocess.check_output(command_title, shell=True).decode("utf-8", 'ignore').rstrip()[:-4]
         return title
+    
+    def add_ffmpeg_path_to_command(self, command):
+        return command + ' --ffmpeg-location {}'.format(
+            resource_path(os.path.join('bin', 'ffmpeg', 'bin', 'ffmpeg.exe'))
+        )
 
     def build_download_command(self, start, end, title):
         if self.type == 'audio':
@@ -120,6 +126,7 @@ class DownloadThread(threading.Thread):
                 os.path.join(self.folder_text_label.get(), title), 
                 self.entry_url_label.get()
             )
+        command = self.add_ffmpeg_path_to_command(command)
         return command
 
     def check_timings(self):
